@@ -4,11 +4,11 @@ Mobilanpassad PWA för familjens transaktionsgranskning i Google Sheets. Ingen e
 
 ## Lokal utveckling
 
-Kopiera `.env.example` till `.env.local`, fyll i Google Picker API-nyckeln och Google Cloud-projektets nummer. Installera med `npm install` och starta med `npm run dev`. Google OAuth måste tillåta `http://localhost:5173`. Förhandsgranska produktionsbygget med `npm run build` och `npm run preview` (registrera även preview-origin om den används för autentisering).
+Standardkonfigurationen har OAuth Client ID och Familjebudgets kalkylarks-ID. Kopiera `.env.example` till `.env.local` om du vill använda andra värden. Installera med `npm install` och starta med `npm run dev`. Google OAuth måste tillåta `http://localhost:5173`. Förhandsgranska produktionsbygget med `npm run build` och `npm run preview` (registrera även preview-origin om den används för autentisering).
 
 ## Google
 
-Aktivera Sheets, Drive och Picker API. Lägg till testanvändarna. OAuth-klienten använder Google Identity Services tokenmodell med `drive.file`, och Picker väljer den befintliga filen. API-nyckeln måste vara begränsad till Picker och till appens webbdomäner. Använd inte en client secret i klienten. Dela kalkylarket med respektive användare som redigerare. Vid hosting, registrera den exakta HTTPS-originen i Google Cloud.
+Aktivera Google Sheets API. Lägg till testanvändarna och behörigheten `https://www.googleapis.com/auth/spreadsheets` under Google Auth Platform → Data Access. OAuth använder Google Identity Services tokenmodell. Ingen API-nyckel, Picker eller client secret krävs. Behörigheten omfattar användarens kalkylark, men appen anropar endast det konfigurerade kalkylarket. Dela det privat med respektive användare som redigerare. Registrera `https://stefanavesand.github.io` och `http://localhost:5173` som Authorized JavaScript origins. Redirect URIs lämnas tomt.
 
 ## Datamodell
 
@@ -20,4 +20,8 @@ Tokens och ekonomiska uppgifter finns endast i minnet; inga transaktioner i offl
 
 ## Status
 
-v0.1: första granskningsklienten. Live OAuth och test mot ett separat testkalkylark måste verifieras före användning med riktiga data.
+v0.2: direktanslutning utan Picker. Live OAuth och test mot ett separat testkalkylark måste verifieras före användning med riktiga data.
+
+## GitHub Pages
+
+I repository Settings → Pages → Build and deployment, välj Source: GitHub Actions. Kör workflowen Deploy PWA (eller pusha till main). Efter lyckad publicering: https://stefanavesand.github.io/familjeekonomen/. Källkoden är offentlig, men kalkylarket är privat. Kalkylarks-ID och OAuth Client ID är publika identifierare, inte åtkomstnycklar.
