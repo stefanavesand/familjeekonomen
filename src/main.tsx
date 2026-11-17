@@ -1,11 +1,11 @@
 import React,{useEffect,useState} from 'react';
 import {createRoot} from 'react-dom/client';
-import {prepare,login,logout,spreadsheetId,read,write,hasSession} from './google';
+import {prepare,login,logout,spreadsheetId,read,write,hasSession,restoreSession} from './google';
 import {reviews,answer,answered,handled,pending,status,money,type Review,type Answer} from './model';
 import './style.css';
 function App(){
 const [ready,R]=useState(false),[connected,C]=useState(false),[id,I]=useState(''),[items,S]=useState<Review[]>([]),[types,T]=useState<string[]>([]),[projects,P]=useState<string[]>([]),[error,E]=useState(''),[notice,N]=useState(''),[busy,B]=useState(false),[query,Q]=useState(''),[payer,F]=useState('Alla'),[month,M]=useState(''),[min,L]=useState('0'),[mode,V]=useState('todo'),[selected,D]=useState<Review|null>(null),[draft,A]=useState<Answer>(['','','','']);
-useEffect(()=>{prepare().then(()=>R(true)).catch(e=>E(e.message));},[]);
+useEffect(()=>{prepare().then(async()=>{R(true);if(restoreSession()){C(true);await task(()=>refresh(spreadsheetId));}}).catch(e=>E(e.message));},[]);
 async function task(f:()=>Promise<void>){B(true);E('');N('');try{await f();}catch(e){E(e instanceof Error?e.message:String(e));}finally{B(false);}}
 async function refresh(file=id){const [t,k,p]=await Promise.all([read(file,"'Transaktioner'!A:W"),read(file,"'Kostnadstyper'!A2:A"),read(file,"'Projekt'!A2:A")]);if(String(t[0]?.[12])!=='Wallet-ID'||String(t[0]?.[15])!=='Granskningsstatus')throw new Error('Kalkylarket har inte förväntad struktur.');S(reviews(t));T(k.map(r=>String(r[0]||'')).filter(Boolean));P(p.map(r=>String(r[0]||'')).filter(Boolean));I(file);}
 function edit(r:Review){D(r);A([...r.answer]);E('');N('');}

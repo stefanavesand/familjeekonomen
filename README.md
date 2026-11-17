@@ -12,11 +12,11 @@ Aktivera Google Sheets API. Lägg till testanvändarna och behörigheten `https:
 
 ## Datamodell
 
-Appen läser huvudtabellen `Transaktioner` (A:W), `Kostnadstyper` och `Projekt`. Granskningsstatus och svar ligger i P:W. Wallet-ID är stabil identifierare. Skrivning kontrollerar Wallet-ID, tidigare svar och status innan P:W uppdateras. Detta är inte atomärt; undvik samtidiga ändringar av samma rad. Åtgärdade rader är skrivskyddade i appen. En lokal markering om tidigare inloggning används för att begära ny Google-token med återanslutning; inga tokens sparas permanent.
+Appen läser huvudtabellen `Transaktioner` (A:W), `Kostnadstyper` och `Projekt`. Granskningsstatus och svar ligger i P:W. Wallet-ID är stabil identifierare. Skrivning kontrollerar Wallet-ID, tidigare svar och status innan P:W uppdateras. Detta är inte atomärt; undvik samtidiga ändringar av samma rad. Åtgärdade rader är skrivskyddade i appen. En lokal markering om tidigare inloggning används för att begära ny Google-token med återanslutning; en kortlivad token sparas i sessionStorage för att överleva omladdning i samma flik. Vid utgången token eller ny flik krävs återanslutning. Utloggning rensar sessionsdata.
 
 ## Integritet
 
-Tokens och ekonomiska uppgifter finns endast i minnet; inga transaktioner i offline-cache. Appskalet kan installeras som PWA. Åtkomst styrs av Googles filbehörigheter; ett filter på betalare är inte en säkerhetsgräns. Ingen användardata skickas till en egen tjänst. Använd HTTPS i produktion och dela endast med behöriga personer.
+Ekonomiska uppgifter finns endast i minnet; kortlivad token i sessionStorage. Inga transaktioner i offline-cache. Appskalet kan installeras som PWA. Åtkomst styrs av Googles filbehörigheter; ett filter på betalare är inte en säkerhetsgräns. Ingen användardata skickas till en egen tjänst. Använd HTTPS i produktion och dela endast med behöriga personer.
 
 ## Status
 
