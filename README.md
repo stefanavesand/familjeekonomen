@@ -12,7 +12,7 @@ Aktivera Google Sheets API. Lägg till testanvändarna och behörigheten `https:
 
 ## Datamodell
 
-Appen läser `Granskning` (A:J), `Transaktioner` (A:O), `Kostnadstyper` och `Projekt`. Wallet-ID kopplar ihop rader. Appen skriver bara granskningssvar i E:H och lämnar klassificering till Familjeekonomen. En rad märkt Åtgärdad är låst i appen. Innan en skrivning kontrolleras Wallet-ID och befintliga värden igen för att minska risken för felrad eller överskrivning. Det är inte en atomär låsning; undvik samtidiga ändringar av samma rad.
+Appen läser huvudtabellen `Transaktioner` (A:W), `Kostnadstyper` och `Projekt`. Granskningsstatus och svar ligger i P:W. Wallet-ID är stabil identifierare. Skrivning kontrollerar Wallet-ID, tidigare svar och status innan P:W uppdateras. Detta är inte atomärt; undvik samtidiga ändringar av samma rad. Åtgärdade rader är skrivskyddade i appen. En lokal markering om tidigare inloggning används för att begära ny Google-token med återanslutning; inga tokens sparas permanent.
 
 ## Integritet
 
@@ -20,7 +20,7 @@ Tokens och ekonomiska uppgifter finns endast i minnet; inga transaktioner i offl
 
 ## Status
 
-v0.2: direktanslutning utan Picker. Live OAuth och test mot ett separat testkalkylark måste verifieras före användning med riktiga data.
+v0.3: granskning direkt i huvudtabellen, mobilgränssnitt och förenklad återanslutning. Live OAuth och test mot ett separat testkalkylark måste verifieras före användning med riktiga data.
 
 ## GitHub Pages
 
